@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>縦分割：長文＋クイズ個別採点サンプル</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+    }
+    /* 全体を左右に分割 */
+    #container {
+      display: flex;
+      flex: 1;
+    }
+    /* 左側：長文表示エリア */
+    #text-section {
+      flex: 1;
+      padding: 20px;
+      border-right: 1px solid #ccc;
+      overflow-y: auto;
+    }
+    /* 右側：小テストエリア */
+    #quiz-section {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .highlight {
+      background-color: yellow;
+      cursor: pointer;
+      margin: 0 2px;
+    }
+    .definition {
+      color: red;
+      margin-left: 5px;
+      display: none; /* 初期は非表示 */
+    }
+    .quiz-question {
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      padding: 10px;
+    }
+    .quiz-options {
+      margin-left: 20px;
+    }
+    .result {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    button {
+      padding: 6px 12px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <!-- 左側：長文表示 -->
+    <div id="text-section">
+      <header>
+        <h2>長文を読んでみよう</h2>
+      </header>
+      <div id="text-container">
+        <!-- JSで内容を挿入 -->
+      </div>
+    </div>
+
+    <!-- 右側：小テスト -->
+    <div id="quiz-section">
+      <header>
+        <h2>小テスト</h2>
+      </header>
+      <div id="quiz-container">
+        <!-- JSでクイズ問題を挿入 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- script.js を読み込む -->
+  <script src="script.js"></script>
+</body>
+</html>
