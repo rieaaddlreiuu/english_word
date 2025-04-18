@@ -9,15 +9,6 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
-// --- 単語データ --- //
-const dictionary = {
-  "ecstatic": "非常に興奮している、熱狂的な",
-  "strolled": "散策する、ぶらぶら歩く",
-  "bustling": "活気に満ちた、にぎやかな",
-  "myriad": "無数の、多数の",
-  "nuances": "微妙な差異、ニュアンス"
-};
-
 // --- クイズデータ --- //
 const quizQuestions = [
   {
@@ -60,6 +51,8 @@ app.get("/", (req, res) => {
 
 // 単語データを返すエンドポイント
 app.get('/api/dictionary', (req, res) => {
+  //外部から取得した辞書データを使用する
+  const dictionary = require('./json_data/ejdict.json');
   res.json(dictionary);
 });
 

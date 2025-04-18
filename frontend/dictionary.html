@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>バックエンドJSON表示サンプル</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 20px;
+    }
+    h1 {
+      font-size: 1.8em;
+    }
+    .dictionary-list {
+      list-style-type: none;
+      padding: 0;
+    }
+    .dictionary-item {
+      background: #f0f0f0;
+      margin: 5px 0;
+      padding: 8px;
+      border-radius: 4px;
+    }
+    .word {
+      font-weight: bold;
+      margin-right: 10px;
+    }
+    .meaning {
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>バックエンドから取得した辞書データ</h1>
+  <ul id="dictionary" class="dictionary-list"></ul>
+
+</body>
+</html>
+<script>
+  // 辞書データを取得する関数
+  async function fetchDictionary() {
+    try {
+      const response = await fetch('http://localhost:3000/api/dictionary');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      console.log(data); // デバッグ用にコンソールに出力
+      // 辞書データを表示する関数を呼び出す
+      displayDictionary(data);
+    } catch (error) {
+      console.error('Fetch error:', error);
+    }
+  }
+
+  // 辞書データを表示する関数
+  function displayDictionary(data) {
+    const MAX_ITEM_COUNT = 50; // 最大表示件数
+    const dictionaryList = document.getElementById('dictionary');
+    dictionaryList.innerHTML = ''; // 既存の内容をクリア
+    let count = 0; // カウンタ初期化
+    for(const item of Object.keys(data)) {
+      console.log(item); // デバッグ用にコンソールに出力
+      // 最大表示件数を超えたら終了
+      if (count >= MAX_ITEM_COUNT) {
+        break;
+      }
+      let word = item;
+      let meaning = data[item];
+      const listItem = document.createElement('li');
+      listItem.className = 'dictionary-item';
+      listItem.innerHTML = `<span class="word">${word}</span><span class="meaning">${meaning}</span>`;
+      dictionaryList.appendChild(listItem);
+      count++; // カウンタをインクリメント
+    };
+  }
+
+  // ページが読み込まれたら辞書データを取得
+  window.onload = fetchDictionary;
+</script>
