@@ -32,41 +32,48 @@
 </head>
 <body>
   <h1>バックエンドから取得した辞書データ</h1>
+  <input type="text" id="search" placeholder="検索..." oninput="displayDictionary()">
   <ul id="dictionary" class="dictionary-list"></ul>
 
 </body>
 </html>
 <script>
   // 辞書データを取得する関数
+  let DIC_DATA;
   async function fetchDictionary() {
     try {
       const response = await fetch('http://localhost:3000/api/dictionary');
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      const data = await response.json();
-      console.log(data); // デバッグ用にコンソールに出力
+      DIC_DATA = await response.json();
+      console.log(); // デバッグ用にコンソールに出力
       // 辞書データを表示する関数を呼び出す
-      displayDictionary(data);
+      displayDictionary(); // Call the display function with the fetched data
     } catch (error) {
       console.error('Fetch error:', error);
     }
   }
 
+
   // 辞書データを表示する関数
-  function displayDictionary(data) {
-    const MAX_ITEM_COUNT = 50; // 最大表示件数
+  function displayDictionary() {
+    const searchInput = document.getElementById('search').value.toLowerCase();
     const dictionaryList = document.getElementById('dictionary');
     dictionaryList.innerHTML = ''; // 既存の内容をクリア
     let count = 0; // カウンタ初期化
-    for(const item of Object.keys(data)) {
+    const MAX_ITEM_COUNT = 50; // 最大表示件数
+    for(const item of Object.keys(DIC_DATA)) {
+      if (!item.toLowerCase().includes(searchInput)) {
+        continue; // 検索語が含まれていない場合はスキップ
+      }
       console.log(item); // デバッグ用にコンソールに出力
       // 最大表示件数を超えたら終了
       if (count >= MAX_ITEM_COUNT) {
         break;
       }
       let word = item;
-      let meaning = data[item];
+      let meaning = DIC_DATA[item];
       const listItem = document.createElement('li');
       listItem.className = 'dictionary-item';
       listItem.innerHTML = `<span class="word">${word}</span><span class="meaning">${meaning}</span>`;
