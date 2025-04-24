@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const dictionaryData = await dictionary.json();
 
   // バックエンド API から長文データを取得
-  const textResponse = await fetch('http://localhost:3000/api/text?id=15');
+  const textResponse = await fetch('http://localhost:3000/api/text?id=10');
   const textData = await textResponse.json();
   const text = textData.text;
   const keywords = textData.keywords; // 重要単語のリスト
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
 
   // ② バックエンド API からクイズデータを取得し、クイズエリアに出題する
-  fetch('http://localhost:3000/api/quiz?id=15')
+  fetch('http://localhost:3000/api/quiz?id=10')
     .then(response => response.json())
     .then(quizQuestions => {
       const quizContainer = document.getElementById('quiz-container');
