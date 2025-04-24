@@ -35,9 +35,8 @@
       margin: 0 2px;
     }
     .definition {
-      color: red;
-      margin-left: 5px;
-      display: none; /* 初期は非表示 */
+      margin-left: 5px; /* 単語との間隔 */
+      display: inline; /* 意味をインライン表示 */
     }
     .quiz-question {
       margin-bottom: 20px;
@@ -60,6 +59,10 @@
       text-align: center;
       margin-bottom: 20px;
     }
+    .highlight-important {
+      background-color: yellow; /* ハイライト色 */
+      cursor: pointer; /* ポインタを手の形にする */
+    }
   </style>
 </head>
 <body>
@@ -68,6 +71,7 @@
     <div id="text-section">
       <header>
         <h2>長文を読んでみよう</h2>
+        <button id="toggle-highlight">ハイライトの切り替え</button>
       </header>
       <div id="text-container">
         <!-- JSで内容を挿入 -->

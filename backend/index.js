@@ -61,6 +61,26 @@ app.get('/api/quiz', (req, res) => {
   res.json(quizQuestions);
 });
 
+// 長文データを返すエンドポイント
+// reqでは長文のidを受け取ることができるようにする
+// 例: /api/text?id=1 のようにリクエストを送信することで、特定の長文を取得できるようにする
+app.get('/api/text', (req, res) => {
+  // 外部から取得した長文データを使用する
+  const textData = require('./json_data/text.json').data;
+  const id = req.query.id;
+
+  if (id) {
+    const textItem = textData.find(item => item.id === parseInt(id));
+    if (textItem) {
+      return res.json(textItem);
+    } else {
+      return res.status(404).json({ error: 'Text not found' });
+    }
+  }
+  
+  res.json(textData);
+});
+
 // ユーザーのクイズ結果を受け取って一時保存（メモリ上に保存）
 let quizResults = [];
 app.post('/api/submit-quiz', (req, res) => {
