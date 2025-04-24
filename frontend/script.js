@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
 
   // ② バックエンド API からクイズデータを取得し、クイズエリアに出題する
-  fetch('http://localhost:3000/api/quiz')
+  fetch('http://localhost:3000/api/quiz?id=15')
     .then(response => response.json())
     .then(quizQuestions => {
       const quizContainer = document.getElementById('quiz-container');
