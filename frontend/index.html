@@ -1,76 +1,127 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8" />
   <title>縦分割：長文＋クイズ個別採点サンプル</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <style>
     body {
       font-family: sans-serif;
       margin: 0;
-      padding: 0;
+      padding-top: 56px;            /* navbar 固定分 */
       height: 100vh;
       display: flex;
+      flex-direction: column;
     }
-    /* 全体を左右に分割 */
+
+    /* コンテナ全体の高さを指定 */
     #container {
       display: flex;
-      flex: 1;
+      height: calc(100vh - 56px);
     }
-    /* 左側：長文表示エリア (70%に相当) */
+
+    /* 左右それぞれ flex-column レイアウト */
+    #text-section,
+    #quiz-section {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 左：長文 (70%) */
     #text-section {
       flex: 7;
-      padding: 20px;
       border-right: 1px solid #ccc;
-      overflow-y: auto;
     }
-    /* 右側：小テストエリア (30%に相当) */
+
+    /* 右：クイズ (30%) */
     #quiz-section {
       flex: 3;
-      padding: 20px;
-      overflow-y: auto;
     }
+
+    /* スクロール領域 */
+    #text-container,
+    #quiz-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
     .highlight {
       background-color: yellow;
       cursor: pointer;
       margin: 0 2px;
     }
+
     .definition {
-      margin-left: 5px; /* 単語との間隔 */
-      display: inline; /* 意味をインライン表示 */
+      margin-left: 5px;
+      /* 単語との間隔 */
+      display: inline;
+      /* 意味をインライン表示 */
     }
+
     .quiz-question {
       margin-bottom: 20px;
       border: 1px solid #ddd;
       padding: 10px;
     }
+
     .quiz-options {
       margin-left: 20px;
     }
+
     .result {
       font-weight: bold;
       margin-top: 10px;
     }
+
     button {
       padding: 6px 12px;
       cursor: pointer;
       margin-top: 10px;
     }
+
     header {
       text-align: center;
       margin-bottom: 20px;
     }
+
     .highlight-important {
-      background-color: yellow; /* ハイライト色 */
-      cursor: pointer; /* ポインタを手の形にする */
+      background-color: yellow;
+      /* ハイライト色 */
+      cursor: pointer;
+      /* ポインタを手の形にする */
     }
   </style>
 </head>
+
 <body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">英単語学習アプリ</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              data-bs-target="#navbarNav" aria-controls="navbarNav"
+              aria-expanded="false" aria-label="ナビ切替">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link active" href="#">ホーム</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">テキスト</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">クイズ</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ナビバー固定分の余白 -->
+  <div style="height:56px;"></div>
+
   <div id="container">
     <!-- 左側：長文表示 -->
     <div id="text-section">
       <header>
-        <h2>長文を読んでみよう</h2>
         <button id="toggle-highlight">ハイライトの切り替え</button>
       </header>
       <div id="text-container">
@@ -80,9 +131,6 @@
 
     <!-- 右側：小テスト -->
     <div id="quiz-section">
-      <header>
-        <h2>小テスト</h2>
-      </header>
       <div id="quiz-container">
         <!-- JSでクイズ問題を挿入 -->
       </div>
@@ -92,4 +140,5 @@
   <!-- script.js を読み込む -->
   <script src="script.js"></script>
 </body>
+
 </html>

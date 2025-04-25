@@ -61,38 +61,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       sentence.appendChild(span);
     });
   });
-  /*
-  words.forEach((w) => {
-    const span = document.createElement('span');
-    const plainWord = w.replace(/[.,]/g, "").toLowerCase();
-    const lemma = lemmaMap[plainWord] || plainWord;
-    console.log(`原形: ${lemma}`);
-
-    // 辞書データに単語が含まれている重要単語をハイライト
-    if (dictionaryData[lemma] && keywords.includes(lemma)) {
-      span.classList.add('highlight-important'); // 重要単語用のクラス
-      span.textContent = w;
-
-      // クリックイベントを追加して意味を表示
-      span.addEventListener('click', () => {
-        const existingDefinition = span.querySelector('.definition');
-        if (existingDefinition) {
-          // 既に意味が表示されている場合は削除
-          existingDefinition.remove();
-        } else {
-          // 新しく意味を表示
-          const definition = document.createElement('span');
-          definition.classList.add('definition');
-          definition.textContent = ` (${dictionaryData[lemma]})`;
-          span.appendChild(definition);
-          console.log(`意味: ${dictionaryData[lemma]}`);
-        }
-      });
-    } else {
-      span.textContent = w;
-    }
-    textContainer.appendChild(span);
-  });*/
 
   // ② バックエンド API からクイズデータを取得し、クイズエリアに出題する
   fetch('http://localhost:3000/api/quiz?id=10')
