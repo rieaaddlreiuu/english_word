@@ -35,8 +35,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       const lemma = lemmaMap[plainWord] || plainWord;
       console.log(`原形: ${lemma}`);
 
-      // 辞書データに単語が含まれている重要単語をハイライト
-      if (dictionaryData[lemma] && keywords.includes(lemma)) {
+      // 辞書データに含まれている単語をハイライト
+      if (dictionaryData[lemma]) {
         span.classList.add('highlight-important'); // 重要単語用のクラス
         span.textContent = w;
 

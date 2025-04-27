@@ -19,6 +19,8 @@ const generateQuizData = (keywords) => {
     const lemma = nlp(keyword).normalize({nouns:true , verbs:true}).out('text');
     const correct = dictionary[lemma] || '意味不明';
 
+    if(correct === '意味不明') return null; // 意味不明な単語はスキップ
+
     const dictKeys = Object.keys(dictionary).filter(key => key !== lemma);
 
     const alternatives = [];
