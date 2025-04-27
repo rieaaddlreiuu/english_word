@@ -1,0 +1,90 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding-top: 56px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#container {
+  display: flex;
+  height: calc(100vh - 56px);
+}
+
+#text-section,
+#quiz-section {
+  display: flex;
+  flex-direction: column;
+}
+
+#text-section {
+  flex: 7;
+  border-right: 1px solid #ccc;
+}
+
+#quiz-section {
+  flex: 3;
+}
+
+#text-container,
+#quiz-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.highlight {
+  background-color: yellow;
+  cursor: pointer;
+  margin: 0 2px;
+}
+
+.definition {
+  margin-left: 5px;
+  display: inline;
+}
+
+.quiz-question {
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  padding: 10px;
+}
+
+.quiz-options {
+  margin-left: 20px;
+}
+
+.result {
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+button {
+  padding: 6px 12px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.highlight-important {
+  background-color: yellow;
+  cursor: pointer;
+}
+
+#quiz-section header {
+  margin-top: 30px;
+  /* 必要に応じて値を調整 */
+}
+
+/* ハイライト切り替えボタンを左下に固定 */
+#toggle-highlight {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+}
