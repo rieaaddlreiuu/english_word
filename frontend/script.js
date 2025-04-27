@@ -1,11 +1,13 @@
 document.addEventListener("DOMContentLoaded", async function () {
-  // 辞書データを取得するためのバックエンド API を呼び出す
+  // 辞書データを取得
   const dictionary = await fetch('http://localhost:3000/api/dictionary');
   const dictionaryData = await dictionary.json();
-  // 読み込む長文のidをurlから取得
-  const urlParams = new URLSearchParams(window.location.search); const textId = urlParams.get('id');
 
-  // バックエンド API から長文データを取得
+  // URLからテキストIDを取得
+  const urlParams = new URLSearchParams(window.location.search);
+  const textId = urlParams.get('id');
+
+  // テキストデータを取得
   const textResponse = await fetch(`http://localhost:3000/api/text?id=${textId}`);
   const textData = await textResponse.json();
   const text = textData.text;
@@ -13,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   const words = text.split(/(\s+|\b)/); // 単語ごとに分割
 
-  // まとめて原形化を取得
+  // 原形化データを取得
   const lemmaResponse = await fetch('http://localhost:3000/api/lemma/bulk', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -30,18 +32,21 @@ document.addEventListener("DOMContentLoaded", async function () {
   Array.from(sentences).forEach((sentence) => {
     const wordsInSentence = sentence.textContent.split(/(\s+|\b)/);
     sentence.innerHTML = ''; // 既存の内容をクリア
-    // 重要単語をハイライト
+
     wordsInSentence.forEach((w) => {
       const span = document.createElement('span');
       const plainWord = w.replace(/[.,]/g, "").toLowerCase();
       const lemma = lemmaMap[plainWord] || plainWord;
 
-      // 辞書データに含まれている単語をハイライト
+      // 重要単語は常に太字
+      span.style.fontWeight = keywords.includes(lemma) ? 'bold' : 'normal';
+
+      // 辞書データに含まれている単語をハイライト可能に
       if (dictionaryData[lemma]) {
-        span.classList.add('highlight-important'); // 重要単語用のクラス
+        span.classList.add('highlight-important'); // ハイライト用クラス
         span.textContent = w;
 
-        // クリックイベントを追加して意味を表示
+        // クリックイベントで意味を表示
         span.addEventListener('click', () => {
           const existingDefinition = span.querySelector('.definition');
           if (existingDefinition) {
