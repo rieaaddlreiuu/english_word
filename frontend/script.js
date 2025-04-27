@@ -2,9 +2,11 @@ document.addEventListener("DOMContentLoaded", async function () {
   // 辞書データを取得するためのバックエンド API を呼び出す
   const dictionary = await fetch('http://localhost:3000/api/dictionary');
   const dictionaryData = await dictionary.json();
+  // 読み込む長文のidをurlから取得
+  const urlParams = new URLSearchParams(window.location.search); const textId = urlParams.get('id');
 
   // バックエンド API から長文データを取得
-  const textResponse = await fetch('http://localhost:3000/api/text?id=10');
+  const textResponse = await fetch(`http://localhost:3000/api/text?id=${textId}`);
   const textData = await textResponse.json();
   const text = textData.text;
   const keywords = textData.keywords; // 重要単語のリスト
@@ -24,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   textContainer.innerHTML = text;
 
   const sentences = textContainer.getElementsByClassName('sentence');
-  
+
   Array.from(sentences).forEach((sentence) => {
     const wordsInSentence = sentence.textContent.split(/(\s+|\b)/);
     sentence.innerHTML = ''; // 既存の内容をクリア
@@ -33,7 +35,6 @@ document.addEventListener("DOMContentLoaded", async function () {
       const span = document.createElement('span');
       const plainWord = w.replace(/[.,]/g, "").toLowerCase();
       const lemma = lemmaMap[plainWord] || plainWord;
-      console.log(`原形: ${lemma}`);
 
       // 辞書データに含まれている単語をハイライト
       if (dictionaryData[lemma]) {
@@ -63,68 +64,79 @@ document.addEventListener("DOMContentLoaded", async function () {
   });
 
   // ② バックエンド API からクイズデータを取得し、クイズエリアに出題する
-  fetch('http://localhost:3000/api/quiz?id=10')
-    .then(response => response.json())
-    .then(quizQuestions => {
-      const quizContainer = document.getElementById('quiz-container');
+  const quizResponse = await fetch(`http://localhost:3000/api/quiz?id=${textId}`);
+  const quizQuestions = await quizResponse.json();
+  const quizContainer = document.getElementById('quiz-container');
 
-      quizQuestions.forEach((q, i) => {
-        const questionDiv = document.createElement('div');
-        questionDiv.classList.add('quiz-question');
+  quizQuestions.forEach((q, i) => {
+    if (q == null) return;
 
-        // 問題文表示
-        const questionText = document.createElement('p');
-        questionText.textContent = `${i + 1}. ${q.question}`;
-        questionDiv.appendChild(questionText);
 
-        // 選択肢リストの生成
-        const optionsDiv = document.createElement('div');
-        optionsDiv.classList.add('quiz-options');
-        q.options.forEach((option, idx) => {
-          const label = document.createElement('label');
-          const radio = document.createElement('input');
-          radio.type = 'radio';
-          radio.name = `question-${i}`;
-          radio.value = idx;
-          label.appendChild(radio);
-          label.appendChild(document.createTextNode(option));
-          optionsDiv.appendChild(label);
-          optionsDiv.appendChild(document.createElement('br'));
-        });
-        questionDiv.appendChild(optionsDiv);
+    const questionDiv = document.createElement('div');
+    questionDiv.classList.add('quiz-question');
+    // 問題文表示
+    const questionText = document.createElement('p');
+    questionText.textContent = `${i + 1}. ${q.question}`;
+    questionDiv.appendChild(questionText);
 
-        // 各項目ごとの採点ボタンと結果表示エリア
-        const gradeBtn = document.createElement('button');
-        gradeBtn.textContent = "採点する";
-        const resultDiv = document.createElement('div');
-        resultDiv.classList.add('result');
-
-        gradeBtn.addEventListener('click', () => {
-          const radios = document.getElementsByName(`question-${i}`);
-          let userAnswer = null;
-          for (let r of radios) {
-            if (r.checked) {
-              userAnswer = parseInt(r.value, 10);
-              break;
-            }
-          }
-          if (userAnswer === null) {
-            resultDiv.textContent = "回答を選択してください。";
-          } else if (userAnswer === q.correctIndex) {
-            resultDiv.textContent = "正解！";
-          } else {
-            resultDiv.textContent = "不正解。";
-          }
-        });
-
-        questionDiv.appendChild(gradeBtn);
-        questionDiv.appendChild(resultDiv);
-        quizContainer.appendChild(questionDiv);
-      });
-    })
-    .catch(error => {
-      console.error("クイズデータの取得に失敗:", error);
+    // 選択肢リストの生成
+    const optionsDiv = document.createElement('div');
+    optionsDiv.classList.add('quiz-options');
+    Array.prototype.forEach.call(q.options, (option, idx) => {
+      const label = document.createElement('label');
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = `question-${i}`;
+      radio.value = idx;
+      label.appendChild(radio);
+      label.appendChild(document.createTextNode(option));
+      optionsDiv.appendChild(label);
+      optionsDiv.appendChild(document.createElement('br'));
     });
+    questionDiv.appendChild(optionsDiv);
+
+    // 各設問の結果表示用エリアだけを用意
+    const resultDiv = document.createElement('div');
+    resultDiv.classList.add('result');
+    questionDiv.appendChild(resultDiv);
+
+    quizContainer.appendChild(questionDiv);
+  });
+
+  // まとめて採点するボタンを追加
+  const gradeAllBtn = document.createElement('button');
+  gradeAllBtn.textContent = "まとめて採点する";
+  gradeAllBtn.classList.add('btn', 'btn-primary', 'mt-3');
+  quizContainer.appendChild(gradeAllBtn);
+
+  gradeAllBtn.addEventListener('click', () => {
+    quizQuestions.forEach((q, i) => {
+      if(q == null) return;
+
+      
+      const resultDiv = quizContainer.children[i].querySelector('.result');
+      const radios = document.getElementsByName(`question-${i}`);
+      let userAnswer = null;
+      for (let r of radios) {
+        if (r.checked) {
+          userAnswer = parseInt(r.value, 10);
+          break;
+        }
+      }
+      if (userAnswer === null) {
+        resultDiv.textContent = "回答を選択してください。";
+        resultDiv.style.color = 'orange';
+      } else if (userAnswer === q.correctIndex) {
+        resultDiv.textContent = "正解！";
+        resultDiv.style.color = 'green';
+      } else {
+        resultDiv.textContent = "不正解。";
+        resultDiv.style.color = 'red';
+      }
+    });
+  });
+
+  //quizContainer.appendChild(gradeAllBtn);
 
   // ハイライトのオン/オフ切り替え
   const toggleHighlightButton = document.getElementById("toggle-highlight");

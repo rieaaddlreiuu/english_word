@@ -15,33 +15,40 @@ app.use(bodyParser.json());
 const dictionary = require('./json_data/ejdict.json');
 
 const generateQuizData = (keywords) => {
-  return keywords.map((keyword) => {
-    const lemma = nlp(keyword).normalize({nouns:true , verbs:true}).out('text');
-    const correct = dictionary[lemma] || '意味不明';
-
-    if(correct === '意味不明') return null; // 意味不明な単語はスキップ
-
-    const dictKeys = Object.keys(dictionary).filter(key => key !== lemma);
-
-    const alternatives = [];
-    for (let i = 0; i < 3; i++) {
-      const randomIndex = Math.floor(Math.random() * dictKeys.length);
-      const altKey = dictKeys[randomIndex];
-      alternatives.push(dictionary[altKey]);
-      dictKeys.splice(randomIndex, 1);
+  return keywords.reduce((quizArray, keyword) => {
+    const lemma = nlp(keyword)
+      .normalize({ nouns: true, verbs: true })
+      .out('text');
+    const correct = dictionary[lemma];
+    if (!correct) {
+      // 辞書にない単語はスキップ
+      return quizArray;
     }
 
-    let options = [correct, ...alternatives];
+    // 正解以外の選択肢を準備
+    const dictKeys = Object.keys(dictionary).filter(key => key !== lemma);
+    const alternatives = [];
+    for (let i = 0; i < 3; i++) {
+      const idx = Math.floor(Math.random() * dictKeys.length);
+      alternatives.push(dictionary[dictKeys[idx]]);
+      dictKeys.splice(idx, 1);
+    }
 
+    // 選択肢をシャッフル
+    const options = [correct, ...alternatives];
     for (let i = options.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [options[i], options[j]] = [options[j], options[i]];
     }
 
     const correctIndex = options.indexOf(correct);
-
-    return { question: `What does "${keyword}" mean?`, options, correctIndex };
-  });
+    quizArray.push({
+      question: `What does "${keyword}" mean?`,
+      options,
+      correctIndex
+    });
+    return quizArray;
+  }, []);
 }
 
 // --- エンドポイントの定義 --- //
