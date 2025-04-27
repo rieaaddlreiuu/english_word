@@ -140,11 +140,15 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // ハイライトのオン/オフ切り替え
   const toggleHighlightButton = document.getElementById("toggle-highlight");
-  let highlightEnabled = true;
+  let highlightEnabled = false; // デフォルトでオフ
+
+  const highlightedWords = document.querySelectorAll(".highlight-important");
+  highlightedWords.forEach((word) => {
+    word.style.backgroundColor = "transparent"; // 初期状態でハイライトをオフ
+  });
 
   toggleHighlightButton.addEventListener("click", () => {
     highlightEnabled = !highlightEnabled;
-    const highlightedWords = document.querySelectorAll(".highlight-important");
     highlightedWords.forEach((word) => {
       word.style.backgroundColor = highlightEnabled ? "yellow" : "transparent";
     });

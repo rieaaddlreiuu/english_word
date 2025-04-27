@@ -11,37 +11,31 @@
       font-family: sans-serif;
       margin: 0;
       padding-top: 56px;
-      /* navbar 固定分 */
       height: 100vh;
       display: flex;
       flex-direction: column;
     }
 
-    /* コンテナ全体の高さを指定 */
     #container {
       display: flex;
       height: calc(100vh - 56px);
     }
 
-    /* 左右それぞれ flex-column レイアウト */
     #text-section,
     #quiz-section {
       display: flex;
       flex-direction: column;
     }
 
-    /* 左：長文 (70%) */
     #text-section {
       flex: 7;
       border-right: 1px solid #ccc;
     }
 
-    /* 右：クイズ (30%) */
     #quiz-section {
       flex: 3;
     }
 
-    /* スクロール領域 */
     #text-container,
     #quiz-container {
       flex: 1;
@@ -57,9 +51,7 @@
 
     .definition {
       margin-left: 5px;
-      /* 単語との間隔 */
       display: inline;
-      /* 意味をインライン表示 */
     }
 
     .quiz-question {
@@ -90,9 +82,15 @@
 
     .highlight-important {
       background-color: yellow;
-      /* ハイライト色 */
       cursor: pointer;
-      /* ポインタを手の形にする */
+    }
+
+    /* ハイライト切り替えボタンを左下に固定 */
+    #toggle-highlight {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 1000;
     }
   </style>
 </head>
@@ -114,21 +112,13 @@
     </div>
   </nav>
 
-  <!-- ナビバー固定分の余白 -->
-  <div style="height:56px;"></div>
-
   <div id="container">
-    <!-- 左側：長文表示 -->
     <div id="text-section">
-      <header>
-        <button id="toggle-highlight">ハイライトの切り替え</button>
-      </header>
       <div id="text-container">
         <!-- JSで内容を挿入 -->
       </div>
     </div>
 
-    <!-- 右側：小テスト -->
     <div id="quiz-section">
       <header>
         <h2 class="text-center">小テスト</h2>
@@ -139,7 +129,9 @@
     </div>
   </div>
 
-  <!-- script.js を読み込む -->
+  <!-- ハイライト切り替えボタン -->
+  <button id="toggle-highlight">ハイライトをオンにする</button>
+
   <script src="script.js"></script>
 </body>
 
