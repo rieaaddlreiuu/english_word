@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Home</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            padding-top: 56px;
+            /* navbar 固定分 */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* コンテナ全体の高さを指定 */
+        #container {
+            display: flex;
+            height: calc(100vh - 56px);
+        }
+
+        /* 左右それぞれ flex-column レイアウト */
+        #text-section,
+        #quiz-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 左：長文 (70%) */
+        #text-section {
+            flex: 7;
+            border-right: 1px solid #ccc;
+        }
+
+        /* 右：クイズ (30%) */
+        #quiz-section {
+            flex: 3;
+        }
+
+        /* スクロール領域 */
+        #text-container,
+        #quiz-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .highlight {
+            background-color: yellow;
+            cursor: pointer;
+            margin: 0 2px;
+        }
+
+        .definition {
+            margin-left: 5px;
+            /* 単語との間隔 */
+            display: inline;
+            /* 意味をインライン表示 */
+        }
+
+        .quiz-question {
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        .quiz-options {
+            margin-left: 20px;
+        }
+
+        .result {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 6px 12px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .highlight-important {
+            background-color: yellow;
+            /* ハイライト色 */
+            cursor: pointer;
+            /* ポインタを手の形にする */
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">英単語学習ツール</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="ナビ切替">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">ホーム</a></li>
+                    <li class="nav-item"><a class="nav-link" href="text.html">テキスト</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="container mt-5">
+            <header>
+                <h1>英単語学習ツールへようこそ！</h1>
+                <p>効率的に英単語を学び、語彙力を向上させましょう。</p>
+            </header>
+
+            <!-- テキストへのリンク -->
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <h2>テキストを読む</h2>
+                    <p>興味のあるテキストを選んで学習を始めましょう。</p>
+                    <a href="text.html?id=10" class="btn btn-primary">テキスト10を読む</a>
+                    <a href="text.html?id=15" class="btn btn-primary">テキスト15を読む</a>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>
